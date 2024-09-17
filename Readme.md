@@ -102,3 +102,23 @@ void Form1_DragDrop(object sender, DragEventArgs e)
 ``` csharp
 Icon.ExtractAssociatedIcon(open.FileName).ToBitmap();
 ```
+
+## چک کردن نام کاربری و پسورد کاربر
+
+``` csharp
+[DllImport("advapi32.dll", SetLastError = true)]
+public static extern bool LogonUser(string lpszUsername, string lpszDomain, string lpszPassword,int dwLogonType, int dwLogonProvider, out IntPtr phToken);
+public const int LOGON32_LOGON_INTERACTIVE = 2;
+public const int LOGON32_PROVIDER_DEFAULT = 0;
+static void Main()
+{
+    WindowsIdentity identity = WindowsIdentity.GetCurrent();
+    string username = "Raha";
+    string domain = identity.Name;
+    string password = "20031";
+    IntPtr tokenHandle = IntPtr.Zero;
+    if (LogonUser(username, domain, password, LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, out tokenHandle))
+        Console.WriteLine("Login successful!");
+    else Console.WriteLine("Login failed.");
+}
+```
